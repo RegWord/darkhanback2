@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { fileURLToPath } from 'url';
 import express from 'express';
-import cors from 'cors';
+import cors from 'cors';  // Оставляем только этот импорт
 import foodRouter from './routers/food.router.js';
 import userRouter from './routers/user.router.js';
 import orderRouter from './routers/order.router.js';
@@ -17,10 +17,12 @@ const __dirname = dirname(__filename);
 
 const app = express();
 app.use(express.json());
+
+// Настроим CORS один раз
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000'],
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   })
 );
 
@@ -28,19 +30,6 @@ app.use('/api/foods', foodRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/upload', uploadRouter);
-
-// Удалите или закомментируйте эти строки, если они есть:
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
-// });
-
-// Вместо этого добавьте CORS для работы с отдельным фронтендом:
-const cors = require('cors');
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
