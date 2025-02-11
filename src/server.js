@@ -29,13 +29,18 @@ app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/upload', uploadRouter);
 
-const publicFolder = path.join(__dirname, 'public');
-app.use(express.static(publicFolder));
+// Удалите или закомментируйте эти строки, если они есть:
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
 
-app.get('*', (req, res) => {
-  const indexFilePath = path.join(publicFolder, 'index.html');
-  res.sendFile(indexFilePath);
-});
+// Вместо этого добавьте CORS для работы с отдельным фронтендом:
+const cors = require('cors');
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
