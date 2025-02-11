@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL || 'https://darkhan2.vercel.app',
+    origin: process.env.FRONTEND_URL || 'https://darkhanfront.vercel.app',
   })
 );
 
